@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import api from "../lib/api";
-import Header from "../components/layout/Header";
 import Hero from "../components/sections/Hero";
 import PeopleGrid from "../components/sections/PeopleGrid";
 
@@ -19,7 +18,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Header />
       <Hero />
       {error ? (
         <div className="container mx-auto px-4 py-12 text-center text-red-600">
