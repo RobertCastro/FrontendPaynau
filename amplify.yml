@@ -1,0 +1,17 @@
+version: 1
+applications:
+  - appRoot: .
+    backend:
+      phases:
+        build:
+          commands:
+            - docker build -t frontend .
+    frontend:
+      phases:
+        build:
+          commands:
+            - docker run -p 80:80 frontend
+      artifacts:
+        baseDirectory: /usr/share/nginx/html
+        files:
+          - '**/*'
