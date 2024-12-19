@@ -1,8 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import api from "../lib/api";
 import Hero from "../components/sections/Hero";
 import PeopleGrid from "../components/sections/PeopleGrid";
-import { deletePerson } from "../api/people";
+import { getAllPeople, deletePerson } from "../api/peopleApi";
 
 export default function Home() {
   const {
@@ -12,10 +11,7 @@ export default function Home() {
     refetch,
   } = useQuery({
     queryKey: ["people"],
-    queryFn: async () => {
-      const { data } = await api.get("/api/v1/people/");
-      return data;
-    },
+    queryFn: getAllPeople,
   });
 
   const handleDelete = async (id: number) => {
