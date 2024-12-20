@@ -7,7 +7,7 @@ export default function Header() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-6">
           <Link to="/" className="text-xl font-bold text-gray-900">
-            PayNau
+            Paynau
           </Link>
           <nav className="hidden md:flex gap-6">
             <Link to="/people" className="text-sm text-gray-600 hover:text-gray-900">

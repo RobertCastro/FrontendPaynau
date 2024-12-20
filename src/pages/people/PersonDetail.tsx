@@ -1,12 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Person } from '@/types/people';
-import api from '@/lib/api';
-
-// const formatDate = (dateString: string | undefined): string => {
-//   if (!dateString) return 'N/A';
-//   return new Date(dateString).toLocaleDateString();
-// }
+import { getPersonById } from '@/api/peopleApi';
 
 const formatDateTime = (dateString: string | undefined): string => {
   if (!dateString) return 'N/A';
@@ -23,10 +18,7 @@ export default function PersonDetail() {
   
   const { data: person, isLoading, error } = useQuery<Person>({
     queryKey: ['person', id],
-    queryFn: async () => {
-      const { data } = await api.get(`/api/v1/people/${id}`);
-      return data;
-    },
+    queryFn: () => getPersonById(id!),
   });
 
   if (isLoading) {

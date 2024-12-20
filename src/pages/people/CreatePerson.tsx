@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { useMutation } from "@tanstack/react-query"
 import { AxiosError } from 'axios'
-import api from '@/lib/api'
-import { CreatePersonInput } from '@/types/people' 
+import { CreatePersonInput } from '@/types/people'
+import { APIError } from '@/types/errors';
+import { createPerson } from '@/api/peopleApi'
 
 export default function CreatePerson() {
   const navigate = useNavigate()
@@ -13,13 +14,24 @@ export default function CreatePerson() {
   const { register, handleSubmit, formState: { errors } } = useForm<CreatePersonInput>()
   
   const createPersonMutation = useMutation({
-    mutationFn: (data: CreatePersonInput) => 
-      api.post("/api/v1/people", data),
-    onError: (err: AxiosError) => {
-      setError("Failed to create person. Please try again.")
-      console.error('Error creating person:', err)
+    mutationFn: createPerson,
+    onError: (err: AxiosError<APIError>) => {
+      console.error('Error details:', {
+        status: err.response?.status,
+        statusText: err.response?.statusText,
+        data: err.response?.data,
+        headers: err.response?.headers
+      })
+      
+      setError(
+        err.response?.data?.detail ?? 
+        err.response?.data?.message ?? 
+        err.message ?? 
+        "Failed to create person. Please try again."
+      )
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log('Success response:', data)
       navigate("/")
     }
   })
@@ -115,7 +127,7 @@ export default function CreatePerson() {
             </button>
             <button
               type="button"
-              onClick={() => navigate("/people")}
+              onClick={() => navigate("/")}
               className="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               Cancel
